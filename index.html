@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>peta desa kopang rembiga</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="leaflet/leaflet.css">
+	<script src="leaflet/leaflet.js"></script>
+	<script src="json/kopang1.js"></script>
+	<style>
+		html{height: 100%;}
+		body{padding: 0px;margin: 0px;height: 100%;}
+
+		#map {width: 100%;height: 100%;}
+
+
+	</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+
+	//membuat icon pada peta
+	var mapIcon = L.Icon.extend({
+		iconSize:   [30, 35]
+	});
+	var masjidIcon = new mapIcon({iconUrl: 'icon/mosque.png'}),
+	sekolahIcon = new mapIcon({iconUrl: 'icon/school.png'}),
+	KantorIcon = new mapIcon({iconUrl: 'icon/office.png'}),
+	RumahIcon = new mapIcon({iconUrl: 'icon/house.png'}),
+	
+
+	// Mendeklarasikan Marker Masjid dan membuatnya menjadi Layer Group
+	
+	mjd1 = L.marker([-8.6330561,116.3493152],{icon: masjidIcon}).bindPopup('Masjid Darussalam Kopang');
+	var mjd2 = L.marker([-8.6351643,116.3457905],{icon: masjidIcon}).bindPopup('Masjid Baitul Hamdi Bajur');
+
+	var masjid = L.layerGroup([mjd1, mjd2]);
+
+
+	// Mendeklarasikan Marker sekolah dan membuatnya menjadi Layer Group
+	var skl1 = new L.marker([-8.6292216,116.3454826],{icon: sekolahIcon}).bindPopup('SMA Negeri 1 Kopang');
+	var skl2 = new L.marker([-8.6301888,116.3531743],{icon: sekolahIcon}).bindPopup('SMKN 1Kopang');
+	var sekolah = L.layerGroup([skl1, skl2]);
+
+	// Mendeklarasikan Marker RUMAH SAYA dan membuatnya menjadi Layer Group
+	var rmh1 = new L.marker([-8.6371834,116.3467062],{icon:RumahIcon}).bindPopup('rumah saya');
+
+	var rumah = L.layerGroup([rmh1]);
+
+
+	// Mendeklarasikan Marker kantor dan membuatnya menjadi Layer Group
+	var ktr1 = new L.marker([-8.6348504,116.3523921],{icon:KantorIcon}).bindPopup('Kantor Desa Rembiga');
+
+	var kantor = L.layerGroup([ktr1]);
+
+
+
+	//Membuat BaseMap Pada Peta
+	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+	var streets = L.tileLayer(mbUrl, {id: 'mapbox.streets',attribution: mbAttr});
+
+	// Mendeklarasikan Peta kedalam Id Map
+	var map = L.map('map', {
+		center : [-8.6404336,116.3407093],
+		zoom: 14,
+		layers: [streets]
+	});
+
+	// Mendeklarasikan BaseLayer Pada Map yakni Street
+	var baseLayer = {
+		"Streets": streets
+	};
+
+	// Deklarasi untuk memilih Icon yang akan ditampilkan
+	var overlays = {
+		"Masjid"  	: masjid,
+		"Sekolah" 	: sekolah,
+		"Kantor" 	: kantor,
+		"rumah"		: rumah
+	};
+	
+
+	// Menambah  variabel baselayaer dan overlay kedalam map
+	L.control.layers(baseLayer, overlays).addTo(map);
+
+	// Menbambil data geospesial wilayah kecamatan kopang
+	L.geoJSON([kopang1], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	}).addTo(map);
+
+</script>
+</body>
+</html>

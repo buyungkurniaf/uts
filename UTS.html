@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PETA KECAMATAN LOTENG</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="leaflet/leaflet.css">
+	<script src="leaflet/leaflet.js"></script>
+	<script src="json/kopang1.js"></script>
+	<style>
+		html{height: 100%;}
+		body{padding: 0px;margin: 0px;height: 100%;}
+
+		#map {width: 100%;height: 100%;}
+
+
+	</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+
+	//membuat icon pada peta
+	var mapIcon = L.Icon.extend({
+		iconSize:   [30, 35]
+	});
+	var masjidIcon = new mapIcon({iconUrl: 'icon/mosque.png'}),
+	keamananIcon = new mapIcon({iconUrl: 'icon/police.png'}),
+	KantorIcon = new mapIcon({iconUrl: 'icon/office.png'}),
+	kesehatanIcon = new mapIcon({iconUrl: 'icon/hospital.png'}),
+
+
+	
+
+	// Mendeklarasikan Marker Masjid dan membuatnya menjadi Layer Group
+	
+	mjd1 = L.marker([-8.6330561,116.3493152],{icon: masjidIcon}).bindPopup('Masjid Darussalam Kopang');
+	var mjd2 = L.marker([-8.6351643,116.3457905],{icon: masjidIcon}).bindPopup('Masjid Baitul Hamdi Bajur');
+
+	var masjid = L.layerGroup([mjd1, mjd2]);
+
+
+	// Mendeklarasikan Marker kesehatan dan membuatnya menjadi Layer Group
+	var ksh1 = new L.marker([-8.7022463,116.2929628],{icon: kesehatanIcon}).bindPopup('RSUD Praya');
+	var ksh2 = new L.marker([-8.7057836,116.2709009],{icon: kesehatanIcon}).bindPopup('Puskemas Praya');
+	var kesehatan = L.layerGroup([ksh1, ksh2]);
+
+
+	// Mendeklarasikan Marker keamanan dan membuatnya menjadi Layer Group
+	var kmn1 = new L.marker([-8.7093711,116.2774837],{icon:keamananIcon}).bindPopup (imageUrl = 'img/x.jpg');
+
+	var keamanan = L.layerGroup([kmn1]);
+
+
+	// Mendeklarasikan Marker kantor kecamatan wilayah kab loteng dan membuatnya menjadi Layer Group
+	var ktr1 = new L.marker([-8.5970043,116.3103041],{icon:KantorIcon}).bindPopup('Kantor camat batukliang');
+	// var ktr2 = new L.marker([-8.5969186,116.310304],{icon:KantorIcon}).bindPopup('Kantor camat batukliang utara');
+	var ktr3 = new L.marker([-8.6941282,116.398418],{icon:KantorIcon}).bindPopup('Kantor camat janapria');
+	var ktr4 = new L.marker([-8.6487567,116.1961807],{icon:KantorIcon}).bindPopup('Kantor camat jonggat');
+	var ktr5 = new L.marker([-8.6327209,116.3500797],{icon:KantorIcon}).bindPopup('Kantor camat kopang');
+	var ktr6 = new L.marker([-8.7051247,116.2696305],{icon:KantorIcon}).bindPopup('Kantor camat praya');
+	var ktr7 = new L.marker([-8.7050329,116.2367995],{icon:KantorIcon}).bindPopup('Kantor camat praya barat');
+	// var ktr8 = new L.marker([-8.5970043,116.3103041],{icon:KantorIcon}).bindPopup('Kantor camat praya barat daya');
+	var ktr9 = new L.marker([-8.7342075,116.3145153],{icon:KantorIcon}).bindPopup('Kantor camat praya tengah');
+	var ktr10 = new L.marker([-8.7341157,116.2816843],{icon:KantorIcon}).bindPopup('Kantor camat praya timur');
+	var ktr11 = new L.marker([-8.6190009,116.2500507],{icon:KantorIcon}).bindPopup('Kantor camat pringgarata');
+	var ktr12 = new L.marker([-8.8005914,116.2908741],{icon:KantorIcon}).bindPopup('Kantor camat pujut');
+	var kantor = L.layerGroup([ktr1,  ktr3, ktr4, ktr5, ktr6, ktr7, ktr9, ktr10, ktr11, ktr12]);
+
+
+
+	//Membuat BaseMap Pada Peta
+	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+	var streets = L.tileLayer(mbUrl, {id: 'mapbox.streets',attribution: mbAttr});
+
+	// Mendeklarasikan Peta kedalam Id Map
+	var map = L.map('map', {
+		center : [-8.7240274,116.2368151],
+		zoom: 11,
+		layers: [streets]
+	});
+
+	// Mendeklarasikan BaseLayer Pada Map yakni Street
+	var baseLayer = {
+		"Streets": streets
+	};
+
+	// Deklarasi untuk memilih Icon yang akan ditampilkan
+	var overlays = {
+		"Masjid"  	: masjid,
+		"Kantor" 	: kantor,
+		"keamanan"	: keamanan,
+		"kesehatan"	: kesehatan
+	};
+	
+
+	// Menambah  variabel baselayaer dan overlay kedalam map
+	L.control.layers(baseLayer, overlays).addTo(map);
+
+	// Menbambil data geospesial wilayah kecamatan kopang
+	L.geoJSON([kopang1], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	}).addTo(map);
+
+</script>
+</body>
+</html>
