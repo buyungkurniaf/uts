@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="leaflet/leaflet.css">
 	<script src="leaflet/leaflet.js"></script>
-	<script src="json/kopang1.js"></script>
+	<script src="json/kabupaten.js"></script>
 	<style>
 		html{height: 100%;}
 		body{padding: 0px;margin: 0px;height: 100%;}
@@ -88,21 +88,47 @@
 	var baseLayer = {
 		"Streets": streets
 	};
+	var kopang = L.geoJSON([kopang], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	});
+	var batukliang = L.geoJSON([batukliang], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	});
+	var praya = L.geoJSON([praya], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	});
+
+	var pringgarata = L.geoJSON([pringgarata], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	});
 
 	// Deklarasi untuk memilih Icon yang akan ditampilkan
 	var overlays = {
 		"Masjid"  	: masjid,
 		"Kantor" 	: kantor,
 		"keamanan"	: keamanan,
-		"kesehatan"	: kesehatan
+		"kesehatan"	: kesehatan,
+
+		"kec kopang" : kopang,
+		"kec praya"	: praya,
+		"kec batukliang" : batukliang,
+		"kec pringgarata" 	: pringgarata
+		
 	};
-	
 
 	// Menambah  variabel baselayaer dan overlay kedalam map
 	L.control.layers(baseLayer, overlays).addTo(map);
 
 	// Menbambil data geospesial wilayah kecamatan kopang
-	L.geoJSON([kopang1], {
+	L.geoJSON([kabupaten], {
 		style: function (feature) {
 			return feature.properties && feature.properties.style;
 		}
